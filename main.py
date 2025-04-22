@@ -54,8 +54,8 @@ coin_image = pg.image.load("assets/coin.png").convert_alpha()
 logo_image = pg.image.load("assets/logo.png").convert_alpha()
 
 #load sounds
-shot_fx = pg.mixer.Sound('') #shot sound
-shot_fx.set_volume(0.5)
+shot_fx = pg.mixer.Sound('assets/concept.mp3') #shot sound
+shot_fx.set_volume(0.0)
 
 pg.mixer.music.load('assets/concept.mp3')
 pg.mixer.music.set_volume(0.3)  

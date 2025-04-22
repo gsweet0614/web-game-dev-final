@@ -26,39 +26,44 @@ selected_turret = None
 
 #load images
 #map
-map_image = pg.image.load('').convert_alpha()
+map_image = pg.image.load('level.png').convert_alpha()
 #turret spritesheets
 turret_spritesheets = []
 for x in range(1, c.TURRET_LEVELS + 1):
-  turret_sheet = pg.image.load(f'').convert_alpha() #!
+  turret_sheet = pg.image.load(f'assets/turret_{x}.png').convert_alpha()
   turret_spritesheets.append(turret_sheet)
 #individual turret image for mouse cursor
-cursor_turret = pg.image.load('').convert_alpha()
+cursor_turret = pg.image.load('assets/turret1.png').convert_alpha()
 #enemies
 enemy_images = {
-  "weak": pg.image.load('').convert_alpha(),
-  "medium": pg.image.load('').convert_alpha(),
-  "strong": pg.image.load('').convert_alpha(),
-  "elite": pg.image.load('').convert_alpha()
+  "weak": pg.image.load('assets/enemy_1.png').convert_alpha(),
+  "medium": pg.image.load('assets/enemy_2.png').convert_alpha(),
+  "strong": pg.image.load('assets/enemy_3.png').convert_alpha(),
+  "elite": pg.image.load('assets/enemy_4.png').convert_alpha()
 }
 #buttons
-buy_turret_image = pg.image.load('').convert_alpha()
-cancel_image = pg.image.load('').convert_alpha()
-upgrade_turret_image = pg.image.load('').convert_alpha()
-begin_image = pg.image.load('').convert_alpha()
-restart_image = pg.image.load('').convert_alpha()
-fast_forward_image = pg.image.load('').convert_alpha()
+buy_turret_image = pg.image.load('assets/buyTurret.png').convert_alpha()
+cancel_image = pg.image.load('assets/Cancel.png').convert_alpha()
+upgrade_turret_image = pg.image.load('assets/upgrade.png').convert_alpha()
+begin_image = pg.image.load('assets/startRound.png').convert_alpha()
+restart_image = pg.image.load('assets/Restart.png').convert_alpha()
+fast_forward_image = pg.image.load('assets/speedUp.png').convert_alpha()
 #gui
-heart_image = pg.image.load("").convert_alpha()
-coin_image = pg.image.load("").convert_alpha()
-logo_image = pg.image.load("").convert_alpha()
+heart_image = pg.image.load("assets/heart.png").convert_alpha()
+coin_image = pg.image.load("assets/coin.png").convert_alpha()
+logo_image = pg.image.load("assets/logo.png").convert_alpha()
 
 #load sounds
 shot_fx = pg.mixer.Sound('') #shot sound
 shot_fx.set_volume(0.5)
 
+pg.mixer.music.load('assets/concept.mp3')
+pg.mixer.music.set_volume(0.3)  
+pg.mixer.music.play(-1) 
+
+
 #load json data for level
-with open('levels/level.tmj') as file:
+with open('level.tmj') as file:
   world_data = json.load(file)
 
 #load fonts for displaying text on the screen

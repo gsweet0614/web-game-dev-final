@@ -33,7 +33,7 @@ for x in range(1, c.TURRET_LEVELS + 1):
   turret_sheet = pg.image.load(f'assets/turrets_{x}.png').convert_alpha()
   turret_spritesheets.append(turret_sheet)
 #individual turret image for mouse cursor
-cursor_turret = pg.image.load('assets/turret1.png').convert_alpha()
+cursor_turret = pg.image.load('assets/turretplacer.png').convert_alpha()
 #enemies
 enemy_images = {
   "weak": pg.image.load('assets/enemy_1.png').convert_alpha(),

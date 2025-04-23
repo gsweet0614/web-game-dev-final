@@ -14,7 +14,7 @@ clock = pg.time.Clock()
 
 #create game window
 screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
-pg.display.set_caption("Tower Defence")
+pg.display.set_caption("Tower Defense")
 
 #game variables
 game_over = False
@@ -77,7 +77,7 @@ def draw_text(text, font, text_col, x, y):
 
 def display_data():
   #draw panel
-  pg.draw.rect(screen, "maroon", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT))
+  pg.draw.rect(screen, "purple", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT))
   pg.draw.rect(screen, "grey0", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, 400), 2)
   screen.blit(logo_image, (c.SCREEN_WIDTH, 400))
   #display data

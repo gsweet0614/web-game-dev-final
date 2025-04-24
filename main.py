@@ -6,10 +6,14 @@ from turret import Turret
 from button import Button
 import constants as c
 import requests
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 
 def get_weather_condition():
-    API_KEY = "2d38a5161e5b1f9ac7da664931d12cf9"  
+    API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
     CITY = "Cincinnati"
     URL = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}"
 
@@ -72,12 +76,16 @@ logo_image = pg.image.load("assets/logo.png").convert_alpha()
 #weather
 weather_icons = {
     "clear": pg.image.load("assets/sun.png").convert_alpha(),
-    "rain": pg.image.load("assets/rain.png").convert_alpha(),
     "clouds": pg.image.load("assets/cloud.png").convert_alpha(),
-    "snow": pg.image.load("assets/snow.png").convert_alpha()
+    "rain": pg.image.load("assets/rain.png").convert_alpha(),
+    "snow": pg.image.load("assets/snow.png").convert_alpha(),
+    "mist": pg.image.load("assets/cloud.png").convert_alpha(),
+    "haze": pg.image.load("assets/cloud.png").convert_alpha(),
+    "drizzle": pg.image.load("assets/rain.png").convert_alpha(),
 }
 
 weather_type = get_weather_condition()
+print("Detected weather type:", weather_type)
 weather_icon = weather_icons.get(weather_type, weather_icons["clear"])
 
 #load sounds

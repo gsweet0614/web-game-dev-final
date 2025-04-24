@@ -59,3 +59,4 @@ class Enemy(pg.sprite.Sprite):
       world.killed_enemies += 1
       world.money += c.KILL_REWARD
       self.kill()
+

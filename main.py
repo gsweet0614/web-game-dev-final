@@ -5,6 +5,26 @@ from world import World
 from turret import Turret
 from button import Button
 import constants as c
+import requests
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
+
+def get_weather_condition():
+    API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
+    CITY = "Cincinnati"
+    URL = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}"
+
+    try:
+        response = requests.get(URL)
+        weather = response.json()
+        weather_type = weather["weather"][0]["main"].lower()
+        return weather_type
+    except:
+        return "clear"
+
 
 #initialise pygame
 pg.init()
@@ -53,6 +73,21 @@ heart_image = pg.image.load("assets/heart.png").convert_alpha()
 coin_image = pg.image.load("assets/coin.png").convert_alpha()
 logo_image = pg.image.load("assets/logo.png").convert_alpha()
 
+#weather
+weather_icons = {
+    "clear": pg.image.load("assets/sun.png").convert_alpha(),
+    "clouds": pg.image.load("assets/cloud.png").convert_alpha(),
+    "rain": pg.image.load("assets/rain.png").convert_alpha(),
+    "snow": pg.image.load("assets/snow.png").convert_alpha(),
+    "mist": pg.image.load("assets/cloud.png").convert_alpha(),
+    "haze": pg.image.load("assets/cloud.png").convert_alpha(),
+    "drizzle": pg.image.load("assets/rain.png").convert_alpha(),
+}
+
+weather_type = get_weather_condition()
+print("Detected weather type:", weather_type)
+weather_icon = weather_icons.get(weather_type, weather_icons["clear"])
+
 #load sounds
 shot_fx = pg.mixer.Sound('assets/concept.mp3') #shot sound
 shot_fx.set_volume(0.0)
@@ -76,17 +111,23 @@ def draw_text(text, font, text_col, x, y):
   screen.blit(img, (x, y))
 
 def display_data():
-  #draw panel
+  # draw panel
   pg.draw.rect(screen, "purple", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT))
   pg.draw.rect(screen, "grey0", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, 400), 2)
   screen.blit(logo_image, (c.SCREEN_WIDTH, 400))
-  #display data
+
+  # display data
   draw_text("LEVEL: " + str(world.level), text_font, "grey100", c.SCREEN_WIDTH + 10, 10)
   screen.blit(heart_image, (c.SCREEN_WIDTH + 10, 35))
   draw_text(str(world.health), text_font, "grey100", c.SCREEN_WIDTH + 50, 40)
   screen.blit(coin_image, (c.SCREEN_WIDTH + 10, 65))
   draw_text(str(world.money), text_font, "grey100", c.SCREEN_WIDTH + 50, 70)
-  
+
+  # show weather info
+  screen.blit(weather_icon, (c.SCREEN_WIDTH + 10, 110))
+  draw_text(weather_type.upper(), text_font, "white", c.SCREEN_WIDTH + 60, 115)
+
+
 
 def create_turret(mouse_pos):
   mouse_tile_x = mouse_pos[0] // c.TILE_SIZE

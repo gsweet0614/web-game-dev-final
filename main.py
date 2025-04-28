@@ -12,31 +12,31 @@ import asyncio
 from dotenv import load_dotenv
 load_dotenv()
 
-#Adding Weather API
-def get_weather_condition():
-    API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
-    CITY = "Cincinnati"
-    URL = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}"
-
-    try:
-        response = requests.get(URL)
-        weather = response.json()
-        weather_type = weather["weather"][0]["main"].lower()
-        return weather_type
-    except:
-        return "clear"
-
-#initialise pg
-pg.init()
-
-#create clock
-clock = pg.time.Clock()
-
-#create game window
-screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
-pg.display.set_caption("UC IT3049C Tower Defense")
-
 async def main():
+
+  #Adding Weather API
+  def get_weather_condition():
+      API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
+      CITY = "Cincinnati"
+      URL = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}"
+
+      try:
+          response = requests.get(URL)
+          weather = response.json()
+          weather_type = weather["weather"][0]["main"].lower()
+          return weather_type
+      except:
+          return "clear"
+
+  #initialise pg
+  pg.init()
+
+  #create clock
+  clock = pg.time.Clock()
+
+  #create game window
+  screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
+  pg.display.set_caption("UC IT3049C Tower Defense")
 
   #game variables
   game_over = False

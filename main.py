@@ -77,7 +77,7 @@ async def main():
   fast_forward_image = pg.image.load('assets/speedUp.png').convert_alpha()
   #gui
   heart_image = pg.image.load("assets/heart.png").convert_alpha() #png image from pngtree.com
-  coin_image = pg.image.load("assets/coin.png").convert_alpha()
+  coin_image = pg.image.load("assets/coin.png").convert_alpha() #flaticon
   logo_image = pg.image.load("assets/logo.png").convert_alpha()
 
   #weather

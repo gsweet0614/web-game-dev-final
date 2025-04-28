@@ -8,7 +8,7 @@ class Button():
     self.clicked = False
     self.single_click = single_click
 
-  def draw(self, surface, hover_image=None):
+  def draw(self, surface, hover_image=None): 
     action = False
     #get mouse position
     pos = pg.mouse.get_pos()

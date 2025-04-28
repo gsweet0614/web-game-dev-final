@@ -33,7 +33,7 @@ clock = pg.time.Clock()
 
 #create game window
 screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
-pg.display.set_caption("Tower Defense")
+pg.display.set_caption("UC IT3049C Tower Defense")
 
 #game variables
 game_over = False

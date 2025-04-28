@@ -1,4 +1,5 @@
 import pygame as pg
+import sys as sys
 import json
 from enemy import Enemy
 from world import World
@@ -10,8 +11,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-
-
+#Adding Weather API
 def get_weather_condition():
     API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
     CITY = "Cincinnati"
@@ -25,8 +25,7 @@ def get_weather_condition():
     except:
         return "clear"
 
-
-#initialise pygame
+#initialise pg
 pg.init()
 
 #create clock
@@ -43,6 +42,11 @@ level_started = False
 last_enemy_spawn = pg.time.get_ticks()
 placing_turrets = False
 selected_turret = None
+toggle = False
+
+#custom colors
+retro_pink = (255, 72, 196)
+retro_blue = (43, 209, 252)
 
 #load images
 #map
@@ -69,7 +73,7 @@ begin_image = pg.image.load('assets/startRound.png').convert_alpha()
 restart_image = pg.image.load('assets/Restart.png').convert_alpha()
 fast_forward_image = pg.image.load('assets/speedUp.png').convert_alpha()
 #gui
-heart_image = pg.image.load("assets/heart.png").convert_alpha()
+heart_image = pg.image.load("assets/heart.png").convert_alpha() #png image from pngtree.com
 coin_image = pg.image.load("assets/coin.png").convert_alpha()
 logo_image = pg.image.load("assets/logo.png").convert_alpha()
 
@@ -104,6 +108,8 @@ with open('level.tmj') as file:
 #load fonts for displaying text on the screen
 text_font = pg.font.SysFont("Consolas", 24, bold = True)
 large_font = pg.font.SysFont("Consolas", 36)
+fun_font = pg.font.Font("assets/font.ttf", 24)
+mine_font = pg.font.Font("assets/minecraft.ttf", 20)
 
 #function for outputting text onto the screen
 def draw_text(text, font, text_col, x, y):
@@ -112,20 +118,20 @@ def draw_text(text, font, text_col, x, y):
 
 def display_data():
   # draw panel
-  pg.draw.rect(screen, "purple", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT))
-  pg.draw.rect(screen, "grey0", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, 400), 2)
+  pg.draw.rect(screen, retro_pink, (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT - 100))
+  pg.draw.rect(screen, retro_blue, (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, 400), 2)
   screen.blit(logo_image, (c.SCREEN_WIDTH, 400))
 
   # display data
-  draw_text("LEVEL: " + str(world.level), text_font, "grey100", c.SCREEN_WIDTH + 10, 10)
-  screen.blit(heart_image, (c.SCREEN_WIDTH + 10, 35))
-  draw_text(str(world.health), text_font, "grey100", c.SCREEN_WIDTH + 50, 40)
-  screen.blit(coin_image, (c.SCREEN_WIDTH + 10, 65))
-  draw_text(str(world.money), text_font, "grey100", c.SCREEN_WIDTH + 50, 70)
+  draw_text("LEVEL " + str(world.level), fun_font, retro_blue, c.SCREEN_WIDTH + 14, 10)
+  screen.blit(heart_image, (c.SCREEN_WIDTH + 10, 75))
+  draw_text(str(world.health), fun_font, retro_blue, c.SCREEN_WIDTH + 50, 70)
+  screen.blit(coin_image, (c.SCREEN_WIDTH + 10, 127))
+  draw_text(str(world.money), fun_font, retro_blue, c.SCREEN_WIDTH + 50, 120)
 
   # show weather info
-  screen.blit(weather_icon, (c.SCREEN_WIDTH + 10, 110))
-  draw_text(weather_type.upper(), text_font, "white", c.SCREEN_WIDTH + 60, 115)
+  screen.blit(weather_icon, (c.SCREEN_WIDTH + 247, 350))
+  draw_text("WEATHER IS " + weather_type.upper(), mine_font, retro_blue, c.SCREEN_WIDTH +  10, 355)
 
 
 
@@ -169,12 +175,13 @@ enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
 #create buttons
-turret_button = Button(c.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
-cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_image, True)
-upgrade_button = Button(c.SCREEN_WIDTH + 5, 180, upgrade_turret_image, True)
-begin_button = Button(c.SCREEN_WIDTH + 60, 300, begin_image, True)
+turret_button = Button(c.SCREEN_WIDTH + 71, 230, buy_turret_image, True)
+cancel_button = Button(c.SCREEN_WIDTH + 48, 220, cancel_image, True)
+upgrade_button = Button(c.SCREEN_WIDTH + 70, 180, upgrade_turret_image, True)
+begin_button = Button(c.SCREEN_WIDTH + 50, 280, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
-fast_forward_button = Button(c.SCREEN_WIDTH + 50, 300, fast_forward_image, False)
+fast_forward_button = Button(c.SCREEN_WIDTH + 50, 280, fast_forward_image, False)
+how_to_button = Button(c.SCREEN_WIDTH + 10, 230, buy_turret_image, True)
 
 #game loop
 run = True
@@ -216,6 +223,9 @@ while run:
   for turret in turret_group:
     turret.draw(screen)
 
+  #draw how-to button
+  how_to_button.draw(screen)
+
   display_data()
 
   if game_over == False:
@@ -249,8 +259,6 @@ while run:
     #draw buttons
     #button for placing turrets
     #for the "turret button" show cost of turret and draw the button
-    draw_text(str(c.BUY_COST), text_font, "grey100", c.SCREEN_WIDTH + 215, 135)
-    screen.blit(coin_image, (c.SCREEN_WIDTH + 260, 130))
     if turret_button.draw(screen):
       placing_turrets = True
     #if placing turrets then show the cancel button as well
@@ -268,18 +276,16 @@ while run:
       #if a turret can be upgraded then show the upgrade button
       if selected_turret.upgrade_level < c.TURRET_LEVELS:
         #show cost of upgrade and draw the button
-        draw_text(str(c.UPGRADE_COST), text_font, "grey100", c.SCREEN_WIDTH + 215, 195)
-        screen.blit(coin_image, (c.SCREEN_WIDTH + 260, 190))
         if upgrade_button.draw(screen):
           if world.money >= c.UPGRADE_COST:
             selected_turret.upgrade()
             world.money -= c.UPGRADE_COST
   else:
-    pg.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
+    pg.draw.rect(screen, retro_blue, (200, 200, 400, 200), border_radius = 30)
     if game_outcome == -1:
-      draw_text("GAME OVER", large_font, "grey0", 310, 230)
+      draw_text("GAME OVER", mine_font, retro_pink, 310, 230)
     elif game_outcome == 1:
-      draw_text("YOU WIN!", large_font, "grey0", 315, 230)
+      draw_text("YOU WIN!", mine_font, retro_pink, 315, 230)
     #restart level
     if restart_button.draw(screen):
       game_over = False
@@ -313,6 +319,9 @@ while run:
             create_turret(mouse_pos)
         else:
           selected_turret = select_turret(mouse_pos)
+          if event.type == pg.KEYDOWN:
+            if event.key == pg.K_SPACE:
+              game_paused = True
 
   #update display
   pg.display.flip()

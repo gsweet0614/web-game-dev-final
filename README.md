@@ -1,5 +1,9 @@
 # web-game-dev-final
 Web Game Development Final Project
+
+
+----------------------------------------------------------------
+In order to run the game, you must install pygame, run "pip install pygame" in your terminal, and then execute the main.py file and it should run fine.
 ----------------------------------------------------------------
 Welcome to 80's Tower Defense!
 ----------------------------------------------------------------

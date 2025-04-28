@@ -13,7 +13,7 @@ ENEMY_SPAWN_DATA = [
     "strong": 0,
     "elite": 0
   },
-  {
+  { 
     #3
     "weak": 20,
     "medium": 5,

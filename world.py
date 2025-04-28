@@ -22,7 +22,7 @@ class World():
     #look through data to extract relevant info
     for layer in self.level_data["layers"]:
       if layer["name"] == "tilemap":
-        self.tile_map = layer["data"]
+        self.tile_map = layer["data"] 
       elif layer["name"] == "waypoints":
         for obj in layer["objects"]:
           waypoint_data = obj["polyline"]
